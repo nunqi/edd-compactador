@@ -1,0 +1,141 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
+
+public class compactador {
+    public static int count(char letra, String texto){
+        int count = 0;
+        for(int i=0; i<texto.length(); i++){
+            if(letra==texto.charAt(i)){
+                count++;
+            }
+        }
+        return count;
+    }
+    public static class Fila{
+        public static class No{
+            public Object dado;
+            public No proximo;
+            public No anterior;
+
+            public No(Object dado){
+                this.dado = dado;
+                this.proximo = null;
+                this.anterior = null;
+            }
+        }
+        private No inicio;
+        private No fim;
+        private int contador;
+
+        public Fila() {
+            this.inicio = null;
+            this.fim = null;
+            this.contador = 0;
+        }
+
+        public void enqueue(char c, int dado) {
+            No novo = new No(dado);
+            if (empty()) {
+                inicio = novo;
+                fim = novo;
+            } else {
+                fim.proximo = novo;
+                novo.anterior = fim;
+                fim = novo;
+            }
+            contador++;
+        }
+
+        public Object searchAndDequeue(Object dado) {
+            if (!empty()) {
+                No aux = inicio;
+                Object aux2;
+
+                while(dado != aux.dado){
+                    aux = aux.proximo;
+                }
+
+                if (size() == 1) {
+                    aux2 = inicio.dado;
+                    inicio = null;
+                    fim = null;
+                }
+                else {
+                    if(aux == inicio){
+                        aux2 = inicio.dado;
+                        inicio = inicio.proximo;
+                        inicio.anterior.proximo = null;
+                        inicio.anterior = null;
+                    }
+                    else if(aux == fim){
+                        aux2 = fim.dado;
+                        fim = fim.anterior;
+                        fim.proximo.anterior = null;
+                        fim.proximo = null;
+                    }
+                    else{
+                        aux2 = aux.dado;
+                        aux.anterior.proximo = aux.proximo;
+                        aux.proximo.anterior = aux.anterior;
+                        aux.anterior = null;
+                        aux.proximo = null;
+                    }
+                }
+                contador--;
+
+                return aux2;
+            } else {
+                throw new IllegalArgumentException("Fila vazia");
+            }
+        }
+
+        public boolean empty() {
+            if (inicio == null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public void clear(){
+            inicio = null;
+            fim = null;
+            contador = 0;
+        }
+
+        public Object front() {
+            return inicio.dado;
+        }
+
+        public int size() {
+            return contador;
+        }
+
+        public void exibir(){
+            for(No aux = inicio; aux != null; aux = aux.proximo){
+                if (aux != fim){
+                    System.out.print(aux.dado + " ");
+                }
+                else {
+                    System.out.println(aux.dado);
+                }
+            }
+        }
+    }
+    public static void main(String[] args) throws FileNotFoundException{
+        String caminho = "C:\\Users\\Samuel Maia\\Downloads\\Numero\\Numeros";
+        Scanner file = new Scanner(new FileReader(caminho)).useDelimiter("\\n");
+
+        Fila fila = new Fila();
+
+        String linha = file.next();
+        char[] caracteres = linha.toCharArray();
+
+        for(char c:caracteres){
+            int frequencia = count(c, linha);
+            fila.enqueue(c, frequencia);
+        }
+        fila.exibir();
+    }
+}
