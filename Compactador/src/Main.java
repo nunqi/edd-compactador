@@ -10,8 +10,10 @@ public class Main {
         Scanner dado = new Scanner(System.in);
         Compactador compactador = new Compactador();
 
-        System.out.print("Escreva o caminho para o arquivo que deseja compactar: ");
-        compactador.compactar(dado.nextLine());
+//        System.out.print("Escreva o nome do arquivo que deseja compactar: ");
+//        File arquivo = new File(dado.nextLine());
+        File arquivo = new File("/home/nunqi/file.txt");
+        compactador.compactar(arquivo);
 
     }
 

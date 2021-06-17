@@ -46,7 +46,7 @@ public class ArvoreBinaria {
         - Avaliação de expressões aritméticas
          */
 
-        System.out.print(raiz.dado + " ");
+        System.out.print(raiz.dado + "/" + raiz.prioridade + " ");
         if(raiz.filhos[0] != null) exibirPreOrdem(raiz.filhos[0]);
         if(raiz.filhos[1] != null) exibirPreOrdem(raiz.filhos[1]);
     }

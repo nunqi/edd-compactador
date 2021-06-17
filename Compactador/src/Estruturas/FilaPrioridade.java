@@ -2,21 +2,6 @@ package Estruturas;
 
 public class FilaPrioridade {
 
-    public static class No {
-
-        public Object dado;
-        public int prioridade;
-        public No anterior;
-        public No proximo;
-
-        public No(Object dado, int prioridade) {
-            this.dado = dado;
-            this.prioridade = prioridade;
-            this.proximo = null;
-        }
-
-    }
-
     private No primeiro;
     private No ultimo;
     private int cont;
@@ -25,6 +10,32 @@ public class FilaPrioridade {
         this.primeiro = null;
         this.ultimo = null;
         this.cont = 0;
+    }
+
+    public void enqueue(No novo) {
+        if (this.empty()) {
+            primeiro = novo;
+            ultimo = novo;
+        }
+        else {
+            if (primeiro.prioridade > novo.prioridade) {
+                novo.proximo = primeiro;
+                primeiro = novo;
+            }
+            else {
+                No aux = primeiro;
+                while (aux.proximo != null && aux.proximo.prioridade <= novo.prioridade) {
+                    aux = aux.proximo;
+                }
+
+                novo.proximo = aux.proximo;
+                aux.proximo = novo;
+            }
+        }
+
+        if (ultimo.proximo != null) ultimo = ultimo.proximo;
+
+        cont++;
     }
 
     public void enqueue(Object valor, int prioridade) {
@@ -88,8 +99,8 @@ public class FilaPrioridade {
         return primeiro == null;
     }
 
-    public Object front() { //também chamdo de "peek"
-        return primeiro.dado;
+    public No front() { //também chamdo de "peek"
+        return primeiro;
     }
 
     public void exibir() {
