@@ -15,7 +15,7 @@ public class Compactador {
     private ListaEstatica<Codigo> codigosHuffman;
 
     public File compactar(String arquivo) throws FileNotFoundException {
-        File arquivoCompactado = new File("");
+        File arquivoCompactado = new File("/home/nunqi/arquivo.txt");
         Scanner dado = new Scanner(arquivoCompactado);
 
         Arrays.fill(histograma, 0);

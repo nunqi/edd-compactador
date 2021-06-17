@@ -6,130 +6,33 @@ Implementar a remoção da raiz
 
 public class ArvoreBinaria {
 
-    public static class No {
-
-        public int dado;
-        public No esquerdo;
-        public No direito;
-
-        public No(int dado) {
-            this.dado = dado;
-            this.esquerdo = null;
-            this.direito = null;
-        }
-
-    }
-
     private No raiz;
-    private int cont;
 
-    public ArvoreBinaria() {
-        raiz = null;
-        cont = 0;
+    public ArvoreBinaria(No esquerdo, No direito) {
+        raiz = new No(0);
+        raiz.filhos[0] = esquerdo;
+        raiz.filhos[1] = direito;
+        raiz.prioridade = esquerdo.prioridade + direito.prioridade;
     }
 
-    public void adicionar(int elemento) {
-        if (this.empty()) this.raiz = new No(elemento);
-        else {
-            adicionar(elemento, this.raiz);
-        }
-
-        cont++;
+    public No getRaiz() {
+        return this.raiz;
     }
 
-    private void adicionar(int elemento, No raiz) {
-        if (elemento < raiz.dado) {
-            if (raiz.esquerdo == null) raiz.esquerdo = new No(elemento);
-            else adicionar(elemento, raiz.esquerdo);
-        }
-        else if (elemento > raiz.dado) {
-            if (raiz.direito == null) raiz.direito = new No(elemento);
-            else adicionar(elemento, raiz.direito);
-        }
-        else {
-            // o que for colocado aqui depende de como a árvore será usada
-        }
-    }
-
-    public void remover(int elemento) {
-        if (!this.empty()) {
-            remover(elemento, raiz, null);
-            cont--;
-        }
-    }
-
-    private void remover(int elemento, No raiz, No pai) {
-        if (elemento == raiz.dado) {
-            if (raiz.esquerdo == null && raiz.direito == null) { // Não tem filhos
-                if (raiz == pai.esquerdo) { // É filho esquerdo
-                    pai.esquerdo = null;
-                }
-                else { // É filho direito
-                    pai.direito = null;
-                }
-            }
-            else if (raiz.esquerdo != null && raiz.direito == null) { // Tem apenas um filho (esquerdo)
-                if (raiz == pai.esquerdo) { // É filho esquerdo
-                    pai.esquerdo = raiz.esquerdo;
-                }
-                else { // É filho direito
-                    pai.direito = raiz.esquerdo;
-                }
-            }
-            else if (raiz.esquerdo == null && raiz.direito != null) { // Tem apenas um filho (direito)
-                if (raiz == pai.esquerdo) { // É filho esquerdo
-                    pai.esquerdo = raiz.direito;
-                }
-                else { // É filho direito
-                    pai.direito = raiz.direito;
-                }
-            }
-            else { // Tem dois filhos
-                raiz.dado = this.min(raiz.direito);
-                remover(raiz.dado, raiz.direito, raiz);
-//                raiz.dado = this.max(raiz.esquerdo);
-//                remover(raiz.dado, raiz.esquerdo, raiz);
-
-            }
-        }
-        else if (elemento < raiz.dado) {
-            if (raiz.esquerdo != null) remover(elemento, raiz.esquerdo, raiz);
-        }
-        else { // if (elemento > raiz.dado)
-            if (raiz.direito != null) remover(elemento, raiz.direito, raiz);
-        }
-    }
-
-    public boolean pesquisar(int elemento) {
-        if (this.empty()) return false;
-        return pesquisar(elemento, this.raiz);
-    }
-
-    private boolean pesquisar(int elemento, No raiz) {
-        if (elemento < raiz.dado) {
-            if (raiz.esquerdo == null) return false;
-            else return pesquisar(elemento, raiz.esquerdo);
-        }
-        else if (elemento > raiz.dado) {
-            if (raiz.direito == null) return false;
-            else return pesquisar(elemento, raiz.direito);
+    public No pesquisar(String caminho) {
+        String[] vCaminho = caminho.split("");
+        No aux = this.raiz;
+        for (int i = 0; i < vCaminho.length; i++) {
+            aux = aux.filhos[Integer.parseInt(vCaminho[i])];
         }
 
-        return true;
-    }
-
-    public int size() {
-        return cont;
-    }
-
-    public boolean empty() {
-        return raiz == null;
+        return aux;
     }
 
     public void exibir() {
 
-//        exibirPreOrdem(this.raiz);
-        exibirEmOrdem(this.raiz);
+        exibirPreOrdem(this.raiz);
+//        exibirEmOrdem(this.raiz);
 //        exibirPosOrdem(this.raiz);
 
         System.out.print("\n");
@@ -144,8 +47,8 @@ public class ArvoreBinaria {
          */
 
         System.out.print(raiz.dado + " ");
-        if(raiz.esquerdo != null) exibirPreOrdem(raiz.esquerdo);
-        if(raiz.direito != null) exibirPreOrdem(raiz.direito);
+        if(raiz.filhos[0] != null) exibirPreOrdem(raiz.filhos[0]);
+        if(raiz.filhos[1] != null) exibirPreOrdem(raiz.filhos[1]);
     }
     private void exibirEmOrdem(No raiz) {
         /*
@@ -153,9 +56,9 @@ public class ArvoreBinaria {
         - Impressão dos elementos conforme a relação de ordem
          */
 
-        if(raiz.esquerdo != null) exibirEmOrdem(raiz.esquerdo);
+        if(raiz.filhos[0] != null) exibirEmOrdem(raiz.filhos[0]);
         System.out.print(raiz.dado + " ");
-        if(raiz.direito != null) exibirEmOrdem(raiz.direito);
+        if(raiz.filhos[1] != null) exibirEmOrdem(raiz.filhos[1]);
     }
     private void exibirPosOrdem(No raiz) {
         /*
@@ -163,18 +66,18 @@ public class ArvoreBinaria {
         - Computar o espaço usado pelos arquivos em um diretório e seus subdiretórios
          */
 
-        if(raiz.esquerdo != null) exibirPosOrdem(raiz.esquerdo);
-        if(raiz.direito != null) exibirPosOrdem(raiz.direito);
+        if(raiz.filhos[0] != null) exibirPosOrdem(raiz.filhos[0]);
+        if(raiz.filhos[1] != null) exibirPosOrdem(raiz.filhos[1]);
         System.out.print(raiz.dado + " ");
     }
 
-    public int min(No raiz) {
-        if (raiz.esquerdo == null) return raiz.dado;
-        else return min(raiz.esquerdo);
+    public Object min(No raiz) {
+        if (raiz.filhos[0] == null) return raiz.dado;
+        else return min(raiz.filhos[0]);
     }
-    public int max(No raiz) {
-        if (raiz.direito == null) return raiz.dado;
-        else return max(raiz.direito);
+    public Object max(No raiz) {
+        if (raiz.filhos[1] == null) return raiz.dado;
+        else return max(raiz.filhos[1]);
     }
 
 }
