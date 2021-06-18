@@ -9,6 +9,10 @@ public class ListaEstatica<T> {
         v = new Object[10];
     }
 
+    public ListaEstatica(int n) {
+        v = new Object[n];
+    }
+
     public void adicionar(T valor) {
         cont++;
         if (cont > v.length) {
@@ -46,6 +50,22 @@ public class ListaEstatica<T> {
 //        }
         else throw new Exception("Posição inválida");
         cont--;
+    }
+
+    public boolean contains(T valor) {
+        for (int i = 0; i < this.size(); i++) {
+            if (v[i].equals(valor)) return true;
+        }
+        return false;
+    }
+
+    public int indexOf(T valor) {
+        for (int i = 0; i < cont; i++) {
+            if (v[i].equals(valor)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public T get(int posicao) {

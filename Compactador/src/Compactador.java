@@ -1,17 +1,19 @@
 import Estruturas.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Compactador {
 
+    FileWriter arq = new FileWriter("/home/nunqi/arquivo.txt");
+    PrintWriter gravarArq = new PrintWriter(arq);
     private ArvoreBinaria arvore;
     private int[] histograma = new int[255];
-    private ListaEstatica<Codigo> tabela;
+    private Tabela tabela = new Tabela();
+
+    public Compactador() throws IOException {
+    }
 
     public File compactar(File arquivo) throws IOException {
         File arquivoCompactado = new File("/home/nunqi/arquivo.txt");
@@ -24,7 +26,8 @@ public class Compactador {
         histograma[10]--;
 
         gerarArvoreHuffman();
-        gerarArquivoCompactado();
+        gerarCodigoHuffman();
+        gerarArquivoCompactado(arquivo);
 
         return arquivoCompactado;
     }
@@ -68,22 +71,16 @@ public class Compactador {
 
         arvore = arvoreAux;
 
-        arvore.exibir();
-
-
-
     }
 
     private void gerarCodigoHuffman() throws IOException {
         ListaEstatica<No> folhas = arvore.encontrarFolhas();
         String caminho;
-        this.tabela = new ListaEstatica<>();
 
         for (int i = 0; i < folhas.size(); i++) {
             No folha = folhas.get(i);
             caminho = arvore.encontrarCaminho(folha);
-            Codigo codigo = new Codigo(folha.dado.toString(), caminho);
-            tabela.adicionar(codigo);
+            tabela.adicionar(folha.dado.toString(), caminho);
         }
 
 //        for (int i = 0; i < tabela.size(); i++) {
@@ -93,14 +90,25 @@ public class Compactador {
 
     }
 
-    private void gerarArquivoCompactado() {
+    private void gerarArquivoCompactado(File arquivo) throws IOException {
+        Scanner dado = new Scanner(arquivo);
         String linha1 = arvore.definirLinha();
-        String linha2 = "";
+        StringBuilder linha2 = new StringBuilder();
+        String linhaAtual;
+        String[] vLinhaAtual;
 
-        
+        while (dado.hasNextLine()) {
+            linhaAtual = dado.nextLine();
+            if (dado.hasNextLine()) linhaAtual += "\n";
+            vLinhaAtual = linhaAtual.split("");
+            for (int i = 0; i < vLinhaAtual.length; i++) {
+                linha2.append(this.tabela.encontrarCodigo(vLinhaAtual[i]));
+            }
+        }
 
-        System.out.println(linha1);
-
+        System.out.println(linha1+"\n"+linha2);
+        gravarArq.printf(linha1+"\n"+linha2);
+        arq.close();
     }
 
 

@@ -86,8 +86,8 @@ public class ArvoreBinaria {
         else {
             str.append("1");
             String bin = Integer.toBinaryString(raiz.dado.toString().charAt(0));
-            System.out.print(raiz.dado.toString().charAt(0) + " ");
-            System.out.println(bin);
+//            System.out.print(raiz.dado.toString().charAt(0) + " ");
+//            System.out.println(bin);
             str.append(String.format("%8s", bin).replace(' ', '0'));
         }
 
