@@ -2,8 +2,8 @@ package Estruturas;
 
 public class Codigo {
 
-    private String dado;
-    private String codigo;
+    public String dado;
+    public String codigo;
 
     public Codigo(String dado, String codigo) {
         this.dado = dado;

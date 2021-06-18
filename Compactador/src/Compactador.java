@@ -2,6 +2,7 @@ import Estruturas.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -10,9 +11,9 @@ public class Compactador {
 
     private ArvoreBinaria arvore;
     private int[] histograma = new int[255];
-    private ListaEstatica<Codigo> codigosHuffman;
+    private ListaEstatica<Codigo> tabela;
 
-    public File compactar(File arquivo) throws FileNotFoundException {
+    public File compactar(File arquivo) throws IOException {
         File arquivoCompactado = new File("/home/nunqi/arquivo.txt");
         Scanner dado = new Scanner(arquivo);
 
@@ -20,12 +21,10 @@ public class Compactador {
         while (dado.hasNextLine()) {
             gerarFrequencia(dado.nextLine());
         }
+        histograma[10]--;
 
         gerarArvoreHuffman();
-        gerarCodigoHuffman();
-
         gerarArquivoCompactado();
-
 
         return arquivoCompactado;
     }
@@ -41,17 +40,10 @@ public class Compactador {
         // Adiciona o "\n" do final da linha, que não é lido pelo nextLine()
         histograma[10]++;
 
-        /*
-        Ainda não cheguei a começar isso, mas pode ser uma boa fazer alguns teste para confirmar
-        quando o "\n" deve ser colocado, dependendo do funcionamento do nextLine().
-        Do jeito que tá, o programa provavelmente vai colocar um "\n" quando não devia.
-        Também pode só colocar um "histograma[10]--" depois do while no compactar().
-         */
-
     }
 
     // Gerar a árvore a partir da fila de prioridade
-    private void gerarArvoreHuffman() {
+    private void gerarArvoreHuffman() throws IOException {
         FilaPrioridade fila = new FilaPrioridade();
 
         for (int i = 0; i < histograma.length; i++) {
@@ -78,13 +70,36 @@ public class Compactador {
 
         arvore.exibir();
 
+
+
     }
 
-    private void gerarCodigoHuffman() {
+    private void gerarCodigoHuffman() throws IOException {
+        ListaEstatica<No> folhas = arvore.encontrarFolhas();
+        String caminho;
+        this.tabela = new ListaEstatica<>();
+
+        for (int i = 0; i < folhas.size(); i++) {
+            No folha = folhas.get(i);
+            caminho = arvore.encontrarCaminho(folha);
+            Codigo codigo = new Codigo(folha.dado.toString(), caminho);
+            tabela.adicionar(codigo);
+        }
+
+//        for (int i = 0; i < tabela.size(); i++) {
+//            System.out.print(tabela.get(i).dado + " -> ");
+//            System.out.println(tabela.get(i).codigo);
+//        }
 
     }
 
     private void gerarArquivoCompactado() {
+        String linha1 = arvore.definirLinha();
+        String linha2 = "";
+
+        
+
+        System.out.println(linha1);
 
     }
 
@@ -97,8 +112,8 @@ public class Compactador {
 
     }
 
-    private void gerarArquivoDescompactado() {
-
+    private void gerarArquivoDescompactado() throws IOException {
+        arvore.exibir();
     }
 
 }

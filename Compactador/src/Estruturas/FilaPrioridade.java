@@ -39,7 +39,7 @@ public class FilaPrioridade {
     }
 
     public void enqueue(Object valor, int prioridade) {
-        No novo = new No(valor, prioridade);
+        No novo = new No(valor, prioridade, null);
 
         if (this.empty()) {
             primeiro = novo;
