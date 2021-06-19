@@ -6,17 +6,17 @@ import java.util.Scanner;
 
 public class Compactador {
 
-    FileWriter arq = new FileWriter("/home/nunqi/arquivo.txt");
-    PrintWriter gravarArq = new PrintWriter(arq);
+    FileWriter arq;
+    PrintWriter gravarArq;
     private ArvoreBinaria arvore;
-    private int[] histograma = new int[255];
-    private Tabela tabela = new Tabela();
+    private final int[] histograma = new int[255];
+    private final Tabela tabela = new Tabela();
 
-    public Compactador() throws IOException {
-    }
+    public void compactar(String inputPath, String outputPath) throws IOException {
 
-    public File compactar(File arquivo) throws IOException {
-        File arquivoCompactado = new File("/home/nunqi/arquivo.txt");
+        File arquivo = new File(inputPath);
+        arq = new FileWriter(outputPath);
+        gravarArq = new PrintWriter(arq);
         Scanner dado = new Scanner(arquivo);
 
         Arrays.fill(histograma, 0);
@@ -29,7 +29,8 @@ public class Compactador {
         gerarCodigoHuffman();
         gerarArquivoCompactado(arquivo);
 
-        return arquivoCompactado;
+        arq.close();
+
     }
 
     // Gerar o histograma
@@ -73,7 +74,7 @@ public class Compactador {
 
     }
 
-    private void gerarCodigoHuffman() throws IOException {
+    private void gerarCodigoHuffman() {
         ListaEstatica<No> folhas = arvore.encontrarFolhas();
         String caminho;
 
@@ -101,27 +102,46 @@ public class Compactador {
             linhaAtual = dado.nextLine();
             if (dado.hasNextLine()) linhaAtual += "\n";
             vLinhaAtual = linhaAtual.split("");
-            for (int i = 0; i < vLinhaAtual.length; i++) {
-                linha2.append(this.tabela.encontrarCodigo(vLinhaAtual[i]));
+            for (String s : vLinhaAtual) {
+                linha2.append(this.tabela.encontrarCodigo(s));
             }
         }
 
         System.out.println(linha1+"\n"+linha2);
         gravarArq.printf(linha1+"\n"+linha2);
+
+    }
+
+
+    public void descompactar(String inputPath, String outputPath) throws IOException {
+
+        File arquivo = new File(inputPath);
+        arq = new FileWriter(outputPath);
+        gravarArq = new PrintWriter(arq);
+        Scanner dado = new Scanner(arquivo);
+
+        String linha1 = dado.nextLine();
+        String linha2 = dado.nextLine();
+
+        regenerarArvoreHuffman(linha1);
+        gerarArquivoDescompactado(linha2);
+
         arq.close();
-    }
-
-
-    public void descompactar(String arquivo) {
 
     }
 
-    private void regenerarArvoreHuffman() {
+    private void regenerarArvoreHuffman(String linha) {
+
+        this.arvore = new ArvoreBinaria(linha);
+        this.arvore.exibir();
 
     }
 
-    private void gerarArquivoDescompactado() throws IOException {
-        arvore.exibir();
+    private void gerarArquivoDescompactado(String mensagemCompactada) {
+
+        String mensagem = arvore.seguirCaminho(mensagemCompactada);
+        gravarArq.printf(mensagem);
+
     }
 
 }

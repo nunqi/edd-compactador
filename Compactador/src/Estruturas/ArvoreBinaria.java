@@ -4,18 +4,14 @@ package Estruturas;
 Implementar a remoção da raiz
  */
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class ArvoreBinaria {
 
     private No raiz;
     private ListaEstatica<No> folhas = new ListaEstatica<>();
     private StringBuilder str;
-
-    FileWriter arq = new FileWriter("/home/nunqi/texto.txt");
-    PrintWriter gravarArq = new PrintWriter(arq);
+    private int posCont;
 
     public ArvoreBinaria(No esquerdo, No direito) throws IOException {
         raiz = new No(0, null);
@@ -26,18 +22,41 @@ public class ArvoreBinaria {
         raiz.prioridade = esquerdo.prioridade + direito.prioridade;
     }
 
-    public No getRaiz() {
-        return this.raiz;
+    public ArvoreBinaria(String str) {
+        this.raiz = new No(0, null);
+        this.posCont = 0;
+        this.str = new StringBuilder();
+        this.str.append(str);
+        this.regenerar();
     }
 
-    public No pesquisar(String caminho) {
-        String[] vCaminho = caminho.split("");
-        No aux = this.raiz;
-        for (int i = 0; i < vCaminho.length; i++) {
-            aux = aux.filhos[Integer.parseInt(vCaminho[i])];
+    private void regenerar() {
+        regenerarPreOrdem(this.raiz);
+    }
+    private void regenerarPreOrdem(No raiz) {
+
+        if (str.toString().charAt(posCont) == '1') {
+            StringBuilder charAtual = new StringBuilder();
+            for (int i = 0; i < 8; i++) {
+                posCont++;
+                charAtual.append(str.toString().charAt(posCont));
+            }
+
+            raiz.dado = (char) Integer.parseInt(charAtual.toString(), 2);
+            raiz.dado = raiz.dado.toString();
+        }
+        else {
+            raiz.filhos[0] = new No(0, raiz);
+            raiz.filhos[1] = new No(0, raiz);
         }
 
-        return aux;
+        posCont++;
+        if (raiz.filhos[0] != null) regenerarPreOrdem(raiz.filhos[0]);
+        if (raiz.filhos[1] != null) regenerarPreOrdem(raiz.filhos[1]);
+    }
+
+    public No getRaiz() {
+        return this.raiz;
     }
 
     public ListaEstatica<No> encontrarFolhas() {
@@ -75,6 +94,23 @@ public class ArvoreBinaria {
         return str.toString();
     }
 
+    public String seguirCaminho(String caminho) {
+        StringBuilder valor = new StringBuilder();
+        No aux = this.raiz;
+
+        for (int i = 0; i < caminho.length(); i++) {
+            if (aux.ehFolha()) {
+                valor.append(aux.dado);
+                aux = this.raiz;
+                i--;
+            }
+            else aux = aux.filhos[caminho.charAt(i) - 48];
+        }
+        valor.append(aux.dado);
+
+        return valor.toString();
+    }
+
     public String definirLinha() {
         str = new StringBuilder();
         definirLinhaPreOrdem(this.raiz);
@@ -95,34 +131,17 @@ public class ArvoreBinaria {
         if (raiz.filhos[1] != null) definirLinhaPreOrdem(raiz.filhos[1]);
     }
 
-    public void exibir() throws IOException {
-        this.exibirPreOrdem(this.raiz);
+    public void exibir() {
+
+        exibirPreOrdem(this.raiz);
         System.out.print("\n");
-        arq.close();
+
     }
-    private void exibirPreOrdem(Estruturas.No raiz) throws IOException {
+    private void exibirPreOrdem(No raiz) {
 
-        if(raiz.dado!=null) {
-            System.out.print(raiz.dado + "/" + raiz.prioridade + " ");
-            gravarArq.printf(raiz.dado + "/" + raiz.prioridade + " ");
-        }
-
-        if (raiz.filhos[0] != null) {
-            this.exibirPreOrdem(raiz.filhos[0]);
-        }
-
-        if (raiz.filhos[1] != null) {
-            this.exibirPreOrdem(raiz.filhos[1]);
-        }
-    }
-
-    public Object min(No raiz) {
-        if (raiz.filhos[0] == null) return raiz.dado;
-        else return min(raiz.filhos[0]);
-    }
-    public Object max(No raiz) {
-        if (raiz.filhos[1] == null) return raiz.dado;
-        else return max(raiz.filhos[1]);
+        System.out.print(raiz.dado + " ");
+        if(raiz.filhos[0] != null) exibirPreOrdem(raiz.filhos[0]);
+        if(raiz.filhos[1] != null) exibirPreOrdem(raiz.filhos[1]);
     }
 
 }
