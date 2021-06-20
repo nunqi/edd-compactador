@@ -68,8 +68,8 @@ public class ListaEstatica<T> {
         return -1;
     }
 
-    public Object get(int posicao) {
-        if (posicao < cont) return v[posicao];
+    public T get(int posicao) {
+        if (posicao < cont) return (T) v[posicao];
         else return null;
     }
 
