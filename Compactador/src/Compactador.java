@@ -107,7 +107,7 @@ public class Compactador {
             }
         }
 
-        System.out.println(linha1+"\n"+linha2);
+//        System.out.println(linha1+"\n"+linha2);
         gravarArq.printf(linha1+"\n"+linha2);
 
     }
@@ -133,7 +133,7 @@ public class Compactador {
     private void regenerarArvoreHuffman(String linha) {
 
         this.arvore = new ArvoreBinaria(linha);
-        this.arvore.exibir();
+//        this.arvore.exibir();
 
     }
 
