@@ -21,6 +21,9 @@ public class ArvoreBinaria {
         raiz.filhos[1].pai = raiz;
         raiz.prioridade = esquerdo.prioridade + direito.prioridade;
     }
+    public ArvoreBinaria(No raiz) throws IOException {
+        this.raiz = raiz;
+    }
 
     public ArvoreBinaria(String str) {
         this.raiz = new No(0, null);
@@ -99,6 +102,7 @@ public class ArvoreBinaria {
         No aux = this.raiz;
 
         for (int i = 0; i < caminho.length(); i++) {
+            if (this.raiz.ehFolha()) break;
             if (aux.ehFolha()) {
                 valor.append(aux.dado);
                 aux = this.raiz;

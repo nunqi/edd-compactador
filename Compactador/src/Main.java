@@ -40,10 +40,10 @@ public class Main {
         }
 
 
-//        input_compactar = "/home/nunqi/Teste/input_compactar.txt"; // Arquivo que vai ser compactado
-//        output_compactar = "/home/nunqi/Teste/aux.txt"; // Arquivo compactado
+//        input_compactar = ""; // Arquivo que vai ser compactado
+//        output_compactar = ""; // Arquivo compactado
 //        input_descompactar = output_compactar; // Arquivo que vai ser descompactado
-//        output_descompactar = "/home/nunqi/Teste/output_descompactar.txt"; // Arquivo descompactado
+//        output_descompactar = ""; // Arquivo descompactado
 //
 //        // O primeiro parâmetro diz o local do arquivo normal e o segundo diz onde vai ser colocado o arquivo compactado
 //        compactador.compactar(input_compactar, output_compactar);

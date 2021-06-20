@@ -58,16 +58,21 @@ public class Compactador {
 
         ArvoreBinaria arvoreAux = null;
 
-        while (fila.size() != 1) {
+        if (fila.size() == 1) {
+            arvoreAux = new ArvoreBinaria(fila.front());
+        }
+        else {
+            while (fila.size() != 1) {
 
-            No primeiro = fila.front();
-            fila.dequeue();
-            No segundo = fila.front();
-            fila.dequeue();
+                No primeiro = fila.front();
+                fila.dequeue();
+                No segundo = fila.front();
+                fila.dequeue();
 
-            arvoreAux = new ArvoreBinaria(primeiro, segundo);
-            fila.enqueue(arvoreAux.getRaiz());
+                arvoreAux = new ArvoreBinaria(primeiro, segundo);
+                fila.enqueue(arvoreAux.getRaiz());
 
+            }
         }
 
         arvore = arvoreAux;
@@ -78,10 +83,13 @@ public class Compactador {
         ListaEstatica<No> folhas = arvore.encontrarFolhas();
         String caminho;
 
-        for (int i = 0; i < folhas.size(); i++) {
-            No folha = folhas.get(i);
-            caminho = arvore.encontrarCaminho(folha);
-            tabela.adicionar(folha.dado.toString(), caminho);
+        if (folhas.size() == 1) tabela.adicionar(folhas.get(0).dado.toString(), "0");
+        else {
+            for (int i = 0; i < folhas.size(); i++) {
+                No folha = folhas.get(i);
+                caminho = arvore.encontrarCaminho(folha);
+                tabela.adicionar(folha.dado.toString(), caminho);
+            }
         }
 
 //        for (int i = 0; i < tabela.size(); i++) {
